@@ -1,0 +1,681 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #F0F4FF; color: #1a1a2e; }
+  :root {
+    --primary: #4361EE; --primary-dark: #3046C5; --primary-light: #EEF1FF;
+    --secondary: #7B2FBE; --accent: #06D6A0; --warn: #F77F00;
+    --text: #1a1a2e; --muted: #6B7280; --border: #E5E7EB;
+    --card: #fff; --surface: #F8FAFF;
+  }
+  .app { min-height: 100vh; }
+  .btn { display:inline-flex; align-items:center; gap:6px; padding:10px 20px; border-radius:8px; font-size:14px; font-weight:500; cursor:pointer; border:none; transition:all 0.2s; }
+  .btn-primary { background:var(--primary); color:#fff; }
+  .btn-primary:hover { background:var(--primary-dark); transform:translateY(-1px); }
+  .btn-outline { background:transparent; color:var(--primary); border:1.5px solid var(--primary); }
+  .btn-outline:hover { background:var(--primary-light); }
+  .btn-sm { padding:6px 14px; font-size:13px; }
+  .card { background:var(--card); border-radius:14px; border:1px solid var(--border); padding:20px; }
+  .badge { display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border-radius:20px; font-size:12px; font-weight:500; }
+  .badge-blue { background:#EEF1FF; color:#4361EE; }
+  .badge-green { background:#E6FBF4; color:#059669; }
+  .badge-orange { background:#FFF3E0; color:#F77F00; }
+  .badge-purple { background:#F3E8FF; color:#7B2FBE; }
+  .progress-bar { background:#E5E7EB; border-radius:99px; height:8px; overflow:hidden; }
+  .progress-fill { height:100%; border-radius:99px; transition:width 1s ease; }
+  input, select, textarea { border:1.5px solid var(--border); border-radius:8px; padding:10px 14px; font-size:14px; font-family:'Inter',sans-serif; width:100%; background:#fff; color:var(--text); outline:none; transition:border-color 0.2s; }
+  input:focus, select:focus, textarea:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(67,97,238,0.1); }
+  label { font-size:13px; font-weight:500; color:var(--muted); display:block; margin-bottom:5px; }
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  @media(max-width:600px) { .grid-2,.grid-3,.grid-4 { grid-template-columns:1fr; } }
+  .nav { background:#fff; border-bottom:1px solid var(--border); padding:0 24px; display:flex; align-items:center; justify-content:space-between; height:60px; position:sticky; top:0; z-index:100; }
+  .nav-logo { display:flex; align-items:center; gap:8px; font-weight:700; font-size:16px; color:var(--primary); }
+  .nav-logo .dot { width:8px; height:8px; background:var(--accent); border-radius:50%; }
+  .nav-tabs { display:flex; gap:2px; overflow-x:auto; }
+  .nav-tab { padding:6px 12px; font-size:12px; font-weight:500; border-radius:6px; cursor:pointer; white-space:nowrap; border:none; background:transparent; color:var(--muted); transition:all 0.15s; }
+  .nav-tab.active { background:var(--primary-light); color:var(--primary); }
+  .nav-tab:hover { background:var(--surface); }
+  .page { padding:24px; max-width:900px; margin:0 auto; }
+  .page-title { font-size:22px; font-weight:700; margin-bottom:4px; }
+  .page-sub { color:var(--muted); font-size:14px; margin-bottom:24px; }
+  .section-title { font-size:15px; font-weight:600; margin-bottom:12px; }
+  .tag { display:inline-flex; align-items:center; gap:4px; padding:4px 10px; background:var(--primary-light); color:var(--primary); border-radius:20px; font-size:12px; font-weight:500; margin:3px; }
+  .tag-remove { cursor:pointer; font-size:16px; line-height:1; color:var(--primary); }
+  .chip-input { display:flex; flex-wrap:wrap; gap:4px; border:1.5px solid var(--border); border-radius:8px; padding:8px; min-height:44px; align-items:center; cursor:text; }
+  .chip-input input { border:none; padding:4px; flex:1; min-width:120px; box-shadow:none !important; width:auto; }
+  .chip-input:focus-within { border-color:var(--primary); box-shadow:0 0 0 3px rgba(67,97,238,0.1); }
+  .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center; }
+  .stat-num { font-size:28px; font-weight:700; color:var(--primary); }
+  .stat-label { font-size:12px; color:var(--muted); margin-top:2px; }
+  .week-card { border-left:3px solid var(--primary); padding:14px 16px; background:#fff; border-radius:0 12px 12px 0; border:1px solid var(--border); border-left:3px solid var(--primary); }
+  .week-title { font-size:13px; font-weight:600; color:var(--primary); margin-bottom:8px; }
+  .topic-item { display:flex; align-items:center; gap:8px; padding:6px 0; font-size:13px; border-bottom:1px solid #f3f4f6; }
+  .topic-item:last-child { border-bottom:none; }
+  .topic-dot { width:6px; height:6px; background:var(--accent); border-radius:50%; flex-shrink:0; }
+  .q-card { border:1px solid var(--border); border-radius:10px; padding:14px; margin-bottom:10px; }
+  .q-num { width:24px; height:24px; background:var(--primary-light); color:var(--primary); border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; margin-right:8px; flex-shrink:0; }
+  .score-circle { position:relative; display:inline-flex; align-items:center; justify-content:center; }
+  .ai-bubble { background:linear-gradient(135deg,#4361EE,#7B2FBE); color:#fff; border-radius:0 14px 14px 14px; padding:12px 16px; font-size:13px; line-height:1.6; margin-bottom:12px; }
+  .user-bubble { background:var(--primary-light); color:var(--primary); border-radius:14px 0 14px 14px; padding:12px 16px; font-size:13px; text-align:right; }
+  .aptitude-topic { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f3f4f6; }
+  .aptitude-topic:last-child { border-bottom:none; }
+  .hero { background:linear-gradient(135deg,#1a1a2e 0%,#16213E 50%,#0F3460 100%); color:#fff; padding:60px 24px; text-align:center; }
+  .hero-title { font-size:36px; font-weight:800; line-height:1.2; margin-bottom:16px; }
+  .hero-accent { color:#06D6A0; }
+  .hero-sub { font-size:16px; color:rgba(255,255,255,0.7); max-width:600px; margin:0 auto 32px; line-height:1.7; }
+  .sdg-badge { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600; margin:4px; }
+  .sdg4 { background:#E8F5E9; color:#2E7D32; }
+  .sdg8 { background:#E3F2FD; color:#1565C0; }
+  .feature-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; padding:24px; max-width:900px; margin:0 auto; }
+  @media(max-width:600px) { .feature-grid { grid-template-columns:1fr; } .hero-title { font-size:26px; } .nav-tabs { gap:1px; } .nav-tab { padding:6px 8px; font-size:11px; } }
+  .feature-card { background:#fff; border:1px solid var(--border); border-radius:14px; padding:20px; }
+  .feature-icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:12px; font-size:20px; }
+  .fi-blue { background:var(--primary-light); }
+  .fi-green { background:#E6FBF4; }
+  .fi-purple { background:#F3E8FF; }
+  .spinner { border:3px solid #E5E7EB; border-top:3px solid var(--primary); border-radius:50%; width:32px; height:32px; animation:spin 0.8s linear infinite; margin:0 auto 12px; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .loading { text-align:center; padding:40px 0; }
+  .ai-typing { display:flex; gap:4px; align-items:center; padding:12px; }
+  .ai-typing span { width:8px; height:8px; background:var(--primary); border-radius:50%; animation:bounce 1s infinite; }
+  .ai-typing span:nth-child(2) { animation-delay:0.15s; }
+  .ai-typing span:nth-child(3) { animation-delay:0.3s; }
+  @keyframes bounce { 0%,60%,100% { transform:translateY(0); } 30% { transform:translateY(-6px); } }
+  .resp-tag { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600; margin-right:4px; background:#E6FBF4; color:#059669; }
+  .chat-wrap { border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+  .chat-msgs { padding:16px; background:var(--surface); min-height:200px; max-height:340px; overflow-y:auto; }
+  .chat-input-row { display:flex; gap:8px; padding:12px; border-top:1px solid var(--border); background:#fff; }
+  .chat-input-row input { flex:1; }
+  .resume-box { position:relative; }
+  .sugg-card { display:flex; gap:12px; align-items:flex-start; padding:12px 14px; background:var(--surface); border:1px solid var(--border); border-radius:10px; margin-bottom:8px; }
+  .sugg-icon { width:32px; height:32px; border-radius:8px; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+  .timeline-dot { width:12px; height:12px; background:var(--primary); border-radius:50%; flex-shrink:0; margin-top:4px; }
+  .timeline-line { width:2px; background:#E5E7EB; flex:1; margin:0 auto; }
+  .ai-score-ring { position:relative; display:inline-block; }
+</style>
+
+<div class="app" id="app">
+  <nav class="nav">
+    <div class="nav-logo">
+      <div class="dot"></div>
+      AI Placement Mentor
+    </div>
+    <div class="nav-tabs" id="navTabs"></div>
+  </nav>
+  <div id="pageContent"></div>
+</div>
+
+<script>
+const TABS = [
+  { id:'home', label:'🏠 Home' },
+  { id:'profile', label:'👤 Profile' },
+  { id:'skills', label:'📊 Skills' },
+  { id:'roadmap', label:'🗺️ Roadmap' },
+  { id:'aptitude', label:'🧮 Aptitude' },
+  { id:'interview', label:'💬 Interview' },
+  { id:'resume', label:'📄 Resume' },
+  { id:'score', label:'🎯 Score' },
+  { id:'ai', label:'🤖 Ethics' }
+];
+
+let currentPage = 'home';
+let profile = {
+  name:'Arjun Sharma', college:'VIT Vellore', branch:'Computer Science', cgpa:'8.4',
+  skills:['Python','Java','HTML/CSS','SQL'], targetRole:'Software Engineer'
+};
+let aptitudeProgress = { quant:45, logic:60, verbal:70 };
+let interviewQs = [];
+let resumeSuggestions = [];
+let chatHistory = [];
+let chatInput = '';
+let hasGeneratedPlan = true;
+
+function render() {
+  const tabs = document.getElementById('navTabs');
+  tabs.innerHTML = TABS.map(t => `<button class="nav-tab ${currentPage===t.id?'active':''}" onclick="navigate('${t.id}')">${t.label}</button>`).join('');
+  document.getElementById('pageContent').innerHTML = getPage(currentPage);
+  bindEvents();
+}
+
+function navigate(p) { currentPage=p; render(); }
+
+function getPage(p) {
+  if(p==='home') return homePage();
+  if(p==='profile') return profilePage();
+  if(p==='skills') return skillsPage();
+  if(p==='roadmap') return roadmapPage();
+  if(p==='aptitude') return aptitudePage();
+  if(p==='interview') return interviewPage();
+  if(p==='resume') return resumePage();
+  if(p==='score') return scorePage();
+  if(p==='ai') return aiPage();
+  return '';
+}
+
+function homePage() {
+  return `
+  <div class="hero">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);padding:6px 14px;border-radius:20px;font-size:12px;margin-bottom:20px;">
+      <span style="width:8px;height:8px;background:#06D6A0;border-radius:50%;display:inline-block;"></span>
+      AI-Powered Career Guidance Platform
+    </div>
+    <h1 class="hero-title">Your <span class="hero-accent">Placement Success</span><br>Starts Here</h1>
+    <p class="hero-sub">AI Placement Mentor helps students identify skill gaps, generate personalized placement roadmaps, prepare for interviews, and improve employability using AI-driven recommendations.</p>
+    <div style="margin-bottom:24px;">
+      <span class="sdg-badge sdg4">🎓 SDG 4: Quality Education</span>
+      <span class="sdg-badge sdg8">💼 SDG 8: Decent Work</span>
+    </div>
+    <button class="btn btn-primary" style="font-size:15px;padding:12px 28px;" onclick="navigate('profile')">Get Started →</button>
+  </div>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon fi-blue" style="font-size:22px;">🎯</div>
+      <div style="font-weight:600;margin-bottom:6px;">Skill Gap Analysis</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.5;">AI identifies the exact skills you need for your target role and shows your current proficiency.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-green" style="font-size:22px;">🗺️</div>
+      <div style="font-weight:600;margin-bottom:6px;">Personalized Roadmap</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.5;">Week-by-week learning plan tailored to your profile and placement timeline.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-purple" style="font-size:22px;">💬</div>
+      <div style="font-weight:600;margin-bottom:6px;">Interview Prep</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.5;">AI-generated technical and HR questions with expert guidance and best answers.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-blue" style="font-size:22px;">📊</div>
+      <div style="font-weight:600;margin-bottom:6px;">Readiness Score</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.5;">Track your placement readiness with a real-time score based on all key parameters.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-green" style="font-size:22px;">🧮</div>
+      <div style="font-weight:600;margin-bottom:6px;">Aptitude Training</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.5;">Structured preparation for quantitative, logical, and verbal sections.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon fi-purple" style="font-size:22px;">📄</div>
+      <div style="font-weight:600;margin-bottom:6px;">Resume AI Assistant</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.5;">AI reviews your resume and gives specific, actionable improvement suggestions.</div>
+    </div>
+  </div>
+  <div style="background:#fff;border-top:1px solid var(--border);padding:40px 24px;text-align:center;">
+    <div style="max-width:900px;margin:0 auto;">
+      <div class="grid-4" style="max-width:600px;margin:0 auto 32px;">
+        <div class="stat-card"><div class="stat-num">10K+</div><div class="stat-label">Students Helped</div></div>
+        <div class="stat-card"><div class="stat-num">92%</div><div class="stat-label">Placement Rate</div></div>
+        <div class="stat-card"><div class="stat-num">500+</div><div class="stat-label">Companies</div></div>
+        <div class="stat-card"><div class="stat-num">4.8★</div><div class="stat-label">Avg Rating</div></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function profilePage() {
+  return `<div class="page">
+    <div class="page-title">Student Profile</div>
+    <div class="page-sub">Tell us about yourself to generate your personalized placement plan</div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="section-title">Basic Information</div>
+      <div class="grid-2" style="gap:14px;">
+        <div><label>Full Name</label><input id="pname" value="${profile.name}" placeholder="Your name"/></div>
+        <div><label>College / University</label><input id="pcollege" value="${profile.college}" placeholder="College name"/></div>
+        <div><label>Branch / Department</label><input id="pbranch" value="${profile.branch}" placeholder="e.g. Computer Science"/></div>
+        <div><label>CGPA</label><input id="pcgpa" type="number" step="0.1" value="${profile.cgpa}" placeholder="e.g. 8.5"/></div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="section-title">Target Role</div>
+      <select id="prole">
+        <option ${profile.targetRole==='Software Engineer'?'selected':''}>Software Engineer</option>
+        <option ${profile.targetRole==='Data Analyst'?'selected':''}>Data Analyst</option>
+        <option ${profile.targetRole==='Full Stack Developer'?'selected':''}>Full Stack Developer</option>
+        <option ${profile.targetRole==='Product Manager'?'selected':''}>Product Manager</option>
+        <option ${profile.targetRole==='DevOps Engineer'?'selected':''}>DevOps Engineer</option>
+        <option ${profile.targetRole==='Machine Learning Engineer'?'selected':''}>Machine Learning Engineer</option>
+      </select>
+    </div>
+    <div class="card" style="margin-bottom:20px;">
+      <div class="section-title">Current Skills</div>
+      <div class="chip-input" id="chipWrap" onclick="document.getElementById('chipInput').focus()">
+        ${profile.skills.map(s=>`<span class="tag">${s}<span class="tag-remove" onclick="removeSkill('${s}')">×</span></span>`).join('')}
+        <input id="chipInput" placeholder="Type skill & press Enter…" style="border:none;box-shadow:none;width:auto;flex:1;min-width:120px;padding:4px 8px;"/>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px;">Press Enter to add a skill. Current: ${profile.skills.join(', ')}</div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px;" onclick="generatePlan()">
+      ✨ Generate Placement Plan
+    </button>
+  </div>`;
+}
+
+function removeSkill(s) { profile.skills=profile.skills.filter(x=>x!==s); render(); }
+
+function generatePlan() {
+  profile.name = document.getElementById('pname').value || profile.name;
+  profile.college = document.getElementById('pcollege').value || profile.college;
+  profile.branch = document.getElementById('pbranch').value || profile.branch;
+  profile.cgpa = document.getElementById('pcgpa').value || profile.cgpa;
+  profile.targetRole = document.getElementById('prole').value || profile.targetRole;
+  hasGeneratedPlan = true;
+  navigate('skills');
+}
+
+function skillsPage() {
+  const allSkills = [
+    { name:'Python', pct: profile.skills.includes('Python')?80:20, has:profile.skills.includes('Python') },
+    { name:'Java', pct: profile.skills.includes('Java')?75:15, has:profile.skills.includes('Java') },
+    { name:'HTML/CSS', pct: profile.skills.includes('HTML/CSS')?85:25, has:profile.skills.includes('HTML/CSS') },
+    { name:'SQL', pct: profile.skills.includes('SQL')?60:20, has:profile.skills.includes('SQL') },
+    { name:'DSA', pct:35, has:false, recommended:true },
+    { name:'Git', pct:40, has:false, recommended:true },
+    { name:'OOP', pct:50, has:false, recommended:true },
+    { name:'System Design', pct:10, has:false, recommended:true },
+    { name:'Problem Solving', pct:45, has:false, recommended:true },
+  ];
+  return `<div class="page">
+    <div class="page-title">AI Skill Gap Analysis</div>
+    <div class="page-sub">Based on your profile and target role: <strong>${profile.targetRole}</strong></div>
+    <div class="grid-2" style="margin-bottom:16px;">
+      <div class="card" style="border-left:4px solid #06D6A0;">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">✅ YOUR CURRENT SKILLS</div>
+        <div>${profile.skills.map(s=>`<span class="badge badge-green" style="margin:2px;">${s}</span>`).join('')}</div>
+      </div>
+      <div class="card" style="border-left:4px solid #F77F00;">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">🎯 RECOMMENDED TO LEARN</div>
+        <div>${['DSA','Git','OOP','System Design','Problem Solving'].map(s=>`<span class="badge badge-orange" style="margin:2px;">${s}</span>`).join('')}</div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="section-title">Skill Proficiency Overview</div>
+      ${allSkills.map(s=>`
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+            <span style="font-size:13px;font-weight:500;">${s.name} ${s.recommended?'<span class="resp-tag">Recommended</span>':''}</span>
+            <span style="font-size:13px;font-weight:600;color:${s.pct>60?'#059669':s.pct>35?'#F77F00':'#EF4444'}">${s.pct}%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:${s.pct}%;background:${s.pct>60?'#06D6A0':s.pct>35?'#F77F00':'#4361EE'}"></div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="card" style="background:linear-gradient(135deg,#EEF1FF,#F3E8FF);">
+      <div style="display:flex;align-items:flex-start;gap:12px;">
+        <div style="font-size:28px;">🤖</div>
+        <div>
+          <div style="font-weight:600;margin-bottom:6px;">AI Analysis for ${profile.name}</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.6;">Your current skill set shows strong foundation in web technologies. For a <strong>${profile.targetRole}</strong> role, focus on Data Structures & Algorithms (DSA) as it's the primary filter in technical rounds. Improve your DSA proficiency from 35% to at least 75% before applying. Your Python skills are strong — leverage them for problem solving. Git and OOP are quick wins you can achieve in 1–2 weeks.</div>
+          <button class="btn btn-primary btn-sm" style="margin-top:10px;" onclick="navigate('roadmap')">View my roadmap →</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function roadmapPage() {
+  const weeks = [
+    { week:'Week 1', color:'#4361EE', topics:['Arrays & Strings','Time & Space Complexity','Recursion Basics','Two Pointer Technique'] },
+    { week:'Week 2', color:'#7B2FBE', topics:['Linked Lists','Stacks & Queues','Sorting Algorithms','Binary Search'] },
+    { week:'Week 3', color:'#06D6A0', topics:['Trees & Binary Trees','Graph Traversal (BFS/DFS)','Dynamic Programming Intro','Greedy Algorithms'] },
+    { week:'Week 4', color:'#F77F00', topics:['Mock Interviews','System Design Basics','HR Round Prep','Resume Polishing & Apply'] },
+  ];
+  return `<div class="page">
+    <div class="page-title">Personalized Placement Roadmap</div>
+    <div class="page-sub">Your 4-week AI-generated plan for ${profile.targetRole} at top tech companies</div>
+    <div class="card" style="margin-bottom:16px;background:linear-gradient(135deg,#1a1a2e,#16213E);color:#fff;">
+      <div style="display:flex;gap:24px;flex-wrap:wrap;">
+        <div><div style="font-size:11px;opacity:0.6;margin-bottom:2px;">STUDENT</div><div style="font-weight:600;">${profile.name}</div></div>
+        <div><div style="font-size:11px;opacity:0.6;margin-bottom:2px;">TARGET</div><div style="font-weight:600;">${profile.targetRole}</div></div>
+        <div><div style="font-size:11px;opacity:0.6;margin-bottom:2px;">DURATION</div><div style="font-weight:600;">4 Weeks</div></div>
+        <div><div style="font-size:11px;opacity:0.6;margin-bottom:2px;">DAILY HOURS</div><div style="font-weight:600;">3–4 hours</div></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      ${weeks.map((w,i)=>`
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="display:flex;flex-direction:column;align-items:center;">
+            <div style="width:36px;height:36px;border-radius:50%;background:${w.color};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;">${i+1}</div>
+            ${i<3?`<div style="width:2px;flex:1;background:${w.color}30;min-height:60px;margin-top:4px;"></div>`:''}
+          </div>
+          <div class="card" style="flex:1;border-left:4px solid ${w.color};">
+            <div style="font-size:13px;font-weight:700;color:${w.color};margin-bottom:10px;">${w.week}</div>
+            ${w.topics.map(t=>`<div class="topic-item"><div class="topic-dot" style="background:${w.color}"></div>${t}</div>`).join('')}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="card" style="margin-top:16px;text-align:center;">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:12px;">Daily Schedule Recommendation</div>
+      <div class="grid-3" style="gap:10px;">
+        <div style="padding:12px;background:var(--primary-light);border-radius:10px;font-size:13px;"><div style="font-weight:600;color:var(--primary);">6–7 AM</div><div style="color:var(--muted);">Revision</div></div>
+        <div style="padding:12px;background:#E6FBF4;border-radius:10px;font-size:13px;"><div style="font-weight:600;color:#059669;">8–10 AM</div><div style="color:var(--muted);">New Topic</div></div>
+        <div style="padding:12px;background:#F3E8FF;border-radius:10px;font-size:13px;"><div style="font-weight:600;color:#7B2FBE;">5–7 PM</div><div style="color:var(--muted);">Practice</div></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function aptitudePage() {
+  const sections = [
+    { name:'Quantitative Aptitude', prog: aptitudeProgress.quant, icon:'🔢', key:'quant', topics:['Percentages','Profit & Loss','Time & Work','Speed, Distance & Time','Simple & Compound Interest'] },
+    { name:'Logical Reasoning', prog: aptitudeProgress.logic, icon:'🧩', key:'logic', topics:['Puzzles','Seating Arrangement','Blood Relations','Syllogisms','Coding-Decoding'] },
+    { name:'Verbal Ability', prog: aptitudeProgress.verbal, icon:'📝', key:'verbal', topics:['Reading Comprehension','Grammar & Vocabulary','Para Jumbles','Fill in the Blanks','Sentence Correction'] },
+  ];
+  return `<div class="page">
+    <div class="page-title">Aptitude Preparation</div>
+    <div class="page-sub">Track and improve your aptitude skills for placement rounds</div>
+    <div class="grid-3" style="margin-bottom:16px;">
+      ${sections.map(s=>`
+        <div class="card" style="text-align:center;">
+          <div style="font-size:28px;margin-bottom:6px;">${s.icon}</div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:8px;">${s.name.split(' ')[0]}</div>
+          <div style="font-size:28px;font-weight:700;color:${s.prog>60?'#059669':s.prog>40?'#F77F00':'#4361EE'};margin-bottom:8px;">${s.prog}%</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${s.prog}%;background:${s.prog>60?'#06D6A0':s.prog>40?'#F77F00':'#4361EE'}"></div></div>
+        </div>
+      `).join('')}
+    </div>
+    ${sections.map(s=>`
+      <div class="card" style="margin-bottom:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <div style="font-weight:600;font-size:14px;">${s.icon} ${s.name}</div>
+          <span class="badge ${s.prog>60?'badge-green':s.prog>40?'badge-orange':'badge-blue'}">${s.prog}% Complete</span>
+        </div>
+        ${s.topics.map(t=>`
+          <div class="aptitude-topic">
+            <span style="font-size:13px;">${t}</span>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div class="progress-bar" style="width:80px;height:6px;"><div class="progress-fill" style="width:${20+Math.floor(Math.random()*60)}%;background:#4361EE;"></div></div>
+              <button class="btn btn-outline btn-sm" onclick="practiceAptitude('${s.key}')">Practice</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `).join('')}
+  </div>`;
+}
+
+function practiceAptitude(key) {
+  aptitudeProgress[key] = Math.min(100, aptitudeProgress[key]+5);
+  render();
+}
+
+function interviewPage() {
+  const techQs = [
+    'Explain HashMap and how it handles collisions internally.',
+    'What is the difference between List and Tuple in Python?',
+    'Explain Time Complexity and give an example of O(n log n).',
+    'What is Object-Oriented Programming? Explain the four pillars.',
+    'What is the difference between SQL and NoSQL databases?',
+    'Explain the concept of recursion with an example.',
+    'What is a RESTful API? Explain HTTP methods.',
+  ];
+  const hrQs = [
+    'Tell me about yourself and your strengths.',
+    'Why should we hire you over other candidates?',
+    'Where do you see yourself in 5 years?',
+    'Describe a challenge you faced and how you overcame it.',
+    'Why are you interested in this role at our company?',
+  ];
+  const showQs = interviewQs.length > 0;
+  return `<div class="page">
+    <div class="page-title">Interview Question Generator</div>
+    <div class="page-sub">AI-generated questions tailored to your profile and target role</div>
+    <div class="card" style="margin-bottom:16px;border:2px dashed var(--primary);background:var(--primary-light);text-align:center;padding:24px;">
+      <div style="font-size:36px;margin-bottom:10px;">🤖</div>
+      <div style="font-weight:600;margin-bottom:6px;">Ready to practice for ${profile.targetRole}?</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:14px;">Generate personalized technical and HR questions based on your profile</div>
+      <button class="btn btn-primary" onclick="generateQs()">⚡ Generate Interview Questions</button>
+    </div>
+    ${showQs ? `
+    <div class="card" style="margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+        <span style="font-size:20px;">💻</span><div class="section-title" style="margin-bottom:0;">Technical Questions</div>
+        <span class="badge badge-blue">${profile.targetRole}</span>
+      </div>
+      ${interviewQs.tech.map((q,i)=>`
+        <div class="q-card" style="${i===0?'border-left:3px solid #4361EE;':''}">
+          <div style="display:flex;align-items:flex-start;gap:8px;">
+            <span class="q-num">${i+1}</span>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:500;margin-bottom:6px;">${q}</div>
+              <button class="btn btn-outline btn-sm" onclick="showHint(${i})">💡 See Hint</button>
+              ${window['hint'+i]?`<div style="margin-top:8px;padding:10px;background:#F0F4FF;border-radius:8px;font-size:12px;color:var(--muted);">${window['hint'+i]}</div>`:''}
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+        <span style="font-size:20px;">🤝</span><div class="section-title" style="margin-bottom:0;">HR Questions</div>
+      </div>
+      ${interviewQs.hr.map((q,i)=>`
+        <div class="q-card">
+          <div style="display:flex;align-items:flex-start;gap:8px;">
+            <span class="q-num" style="background:#E6FBF4;color:#059669;">${i+1}</span>
+            <div style="font-size:13px;font-weight:500;">${q}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    ` : ''}
+  </div>`;
+}
+
+function showHint(i) {
+  const hints = [
+    'HashMap uses key.hashCode() to compute bucket index. Collision handled via chaining or open addressing.',
+    'List is mutable (can change), Tuple is immutable. Use tuple for fixed data, list for dynamic.',
+    'O(n log n) example: Merge Sort. Divide array in O(log n) levels, merge in O(n) each level.',
+    '4 pillars: Encapsulation, Abstraction, Inheritance, Polymorphism.',
+    'SQL: structured, relational, ACID. NoSQL: flexible schema, horizontal scaling, eventual consistency.',
+    'Recursion: function calls itself. Base case stops recursion. Example: factorial(n) = n * factorial(n-1).',
+    'REST: stateless API using HTTP. GET=read, POST=create, PUT=update, DELETE=remove.',
+  ];
+  window['hint'+i] = hints[i] || 'Think about core concepts and give a real-world example.';
+  render();
+}
+
+function generateQs() {
+  const techQs = [
+    'Explain HashMap and how it handles collisions internally.',
+    'What is the difference between List and Tuple in Python?',
+    'Explain Time Complexity and give an example of O(n log n).',
+    'What is Object-Oriented Programming? Explain the four pillars.',
+    'What is the difference between SQL and NoSQL databases?',
+    'Explain the concept of recursion with an example.',
+    'What is a RESTful API? Explain HTTP methods.',
+  ];
+  const hrQs = [
+    'Tell me about yourself and your strengths.',
+    'Why should we hire you over other candidates?',
+    'Where do you see yourself in 5 years?',
+    'Describe a challenge you faced and how you overcame it.',
+    'Why are you interested in this role at our company?',
+  ];
+  interviewQs = { tech: techQs.slice(0,5), hr: hrQs };
+  render();
+}
+
+function resumePage() {
+  return `<div class="page">
+    <div class="page-title">Resume AI Assistant</div>
+    <div class="page-sub">Paste your resume and get AI-powered improvement suggestions</div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="section-title">Your Resume Content</div>
+      <textarea id="resumeText" rows="8" placeholder="Paste your resume text here…\n\nExample:\nName: Arjun Sharma\nSummary: CS student seeking placement...\nSkills: Python, Java, HTML\nProjects: E-commerce website...">${window.resumeText||''}</textarea>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button class="btn btn-primary" onclick="analyzeResume()">🔍 Analyze with AI</button>
+        <button class="btn btn-outline" onclick="loadSampleResume()">Load Sample</button>
+      </div>
+    </div>
+    ${resumeSuggestions.length>0 ? `
+    <div class="card" style="margin-bottom:12px;background:#E6FBF4;border-color:#06D6A0;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <span>✅</span><strong>Analysis Complete — ${resumeSuggestions.length} suggestions found</strong>
+      </div>
+      ${resumeSuggestions.map((s,i)=>`
+        <div class="sugg-card">
+          <div class="sugg-icon">${s.icon}</div>
+          <div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:3px;">${s.title}</div>
+            <div style="font-size:13px;color:var(--muted);">${s.desc}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    ` : ''}
+    <div class="card">
+      <div class="section-title">💡 General Best Practices</div>
+      ${[
+        ['📏','Keep it 1 page','For freshers, a single page resume is ideal.'],
+        ['🎯','Quantify achievements','Use numbers: "Improved load time by 40%"'],
+        ['🔗','Add GitHub & LinkedIn','Recruiters check your online presence.'],
+        ['✨','Use action verbs','Start each bullet with: Built, Designed, Led, Implemented'],
+        ['📐','Consistent formatting','Same font, spacing, and bullet style throughout.'],
+      ].map(([i,t,d])=>`
+        <div class="sugg-card">
+          <div class="sugg-icon">${i}</div>
+          <div><div style="font-size:13px;font-weight:600;margin-bottom:2px;">${t}</div><div style="font-size:12px;color:var(--muted);">${d}</div></div>
+        </div>
+      `).join('')}
+    </div>
+  </div>`;
+}
+
+function loadSampleResume() {
+  window.resumeText = `Arjun Sharma\narjun@email.com | linkedin.com/in/arjun\n\nSummary:\nPassionate CS student looking for opportunities in software development.\n\nSkills: Python, Java, HTML, CSS, MySQL\n\nProjects:\n- E-commerce Website (HTML/CSS/JS)\n- Student Database System (Java, MySQL)\n\nEducation:\nB.Tech CSE, VIT Vellore | CGPA: 8.4\n\nAchievements:\n- Participated in college hackathon`;
+  resumeSuggestions = [];
+  render();
+  setTimeout(()=>{ document.getElementById('resumeText').value = window.resumeText; }, 50);
+}
+
+function analyzeResume() {
+  window.resumeText = document.getElementById('resumeText').value;
+  resumeSuggestions = [
+    { icon:'📈', title:'Add measurable achievements', desc:'Replace "Participated in hackathon" with "Won 2nd place in 48-hour hackathon with 200+ participants".' },
+    { icon:'🔗', title:'Add GitHub profile link', desc:'Include your GitHub URL. Recruiters actively check project code quality.' },
+    { icon:'✍️', title:'Strengthen your summary', desc:'Current summary is generic. Tailor it to your target role: "CS student specializing in backend development seeking SDE role at product companies."' },
+    { icon:'🚀', title:'Highlight technical depth in projects', desc:'Add tech stack, your specific contribution, and business impact for each project.' },
+    { icon:'🎯', title:'Add relevant certifications', desc:'Add any online certifications (Coursera, HackerRank, LeetCode badges) to differentiate yourself.' },
+    { icon:'📐', title:'Fix formatting consistency', desc:'Ensure consistent date formats, bullet styles, and font sizes throughout the document.' },
+  ];
+  render();
+}
+
+function scorePage() {
+  const cgpaScore = Math.min(100, parseFloat(profile.cgpa||8)*10);
+  const skillScore = Math.min(100, profile.skills.length*15);
+  const dsaScore = 35;
+  const aptScore = Math.round((aptitudeProgress.quant+aptitudeProgress.logic+aptitudeProgress.verbal)/3);
+  const total = Math.round((cgpaScore*0.25)+(skillScore*0.30)+(dsaScore*0.25)+(aptScore*0.20));
+  const scoreColor = total>75?'#06D6A0':total>50?'#F77F00':'#EF4444';
+  const scoreLabel = total>75?'Placement Ready 🎉':total>50?'Good Progress 📈':'Needs Improvement 💪';
+  return `<div class="page">
+    <div class="page-title">Placement Readiness Score</div>
+    <div class="page-sub">AI-calculated score based on your complete profile and preparation</div>
+    <div class="card" style="text-align:center;margin-bottom:16px;padding:32px;">
+      <div style="position:relative;display:inline-block;margin-bottom:16px;">
+        <svg width="180" height="180" viewBox="0 0 180 180">
+          <circle cx="90" cy="90" r="75" fill="none" stroke="#E5E7EB" stroke-width="14"/>
+          <circle cx="90" cy="90" r="75" fill="none" stroke="${scoreColor}" stroke-width="14"
+            stroke-dasharray="${2*Math.PI*75}"
+            stroke-dashoffset="${2*Math.PI*75*(1-total/100)}"
+            stroke-linecap="round"
+            transform="rotate(-90 90 90)"/>
+          <text x="90" y="83" text-anchor="middle" font-size="36" font-weight="700" fill="${scoreColor}">${total}%</text>
+          <text x="90" y="104" text-anchor="middle" font-size="13" fill="#6B7280">Readiness</text>
+        </svg>
+      </div>
+      <div style="font-size:20px;font-weight:700;margin-bottom:6px;">${scoreLabel}</div>
+      <div style="font-size:13px;color:var(--muted);">Hello ${profile.name}, here's your detailed breakdown</div>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="section-title">Score Breakdown</div>
+      ${[
+        ['CGPA Score','25%',cgpaScore,'#4361EE'],
+        ['Skills Score','30%',skillScore,'#7B2FBE'],
+        ['DSA Proficiency','25%',dsaScore,'#06D6A0'],
+        ['Aptitude Score','20%',aptScore,'#F77F00'],
+      ].map(([n,w,v,c])=>`
+        <div style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+            <div><span style="font-size:13px;font-weight:500;">${n}</span> <span style="font-size:11px;color:var(--muted);">(Weight: ${w})</span></div>
+            <span style="font-size:14px;font-weight:700;color:${c}">${Math.round(v)}%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${v}%;background:${c}"></div></div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="grid-2">
+      <div class="card" style="border-left:4px solid #06D6A0;">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">💪 YOUR STRENGTHS</div>
+        ${['Strong academic score (CGPA '+profile.cgpa+')','Good foundational skill set','Consistent learner'].map(s=>`<div style="font-size:13px;padding:4px 0;display:flex;gap:6px;"><span style="color:#06D6A0;">✓</span>${s}</div>`).join('')}
+      </div>
+      <div class="card" style="border-left:4px solid #F77F00;">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">🎯 AREAS TO IMPROVE</div>
+        ${['DSA needs serious practice','Build more real projects','Solve 150+ LeetCode problems'].map(s=>`<div style="font-size:13px;padding:4px 0;display:flex;gap:6px;"><span style="color:#F77F00;">→</span>${s}</div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function aiPage() {
+  return `<div class="page">
+    <div class="page-title">Responsible AI Principles</div>
+    <div class="page-sub">How AI Placement Mentor upholds ethical AI standards</div>
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:20px;">
+      ${[
+        { icon:'⚖️', color:'#4361EE', bg:'#EEF1FF', title:'Fairness', desc:'All recommendations are based solely on skills, learning progress, and academic performance — not on demographic information, gender, or background. Every student receives equal, unbiased guidance.' },
+        { icon:'🔍', color:'#7B2FBE', bg:'#F3E8FF', title:'Transparency', desc:'Every recommendation is explained with clear reasoning. You can always see why a skill is suggested or why your score is at a certain level. No black-box decisions.' },
+        { icon:'🔒', color:'#059669', bg:'#E6FBF4', title:'Privacy', desc:'All your data — profile, skills, resume content — stays entirely in your browser\'s local memory. Nothing is sent to any server or stored externally. Your information is yours.' },
+        { icon:'🎯', color:'#F77F00', bg:'#FFF3E0', title:'Honest Guidance', desc:'AI Placement Mentor provides preparation guidance, not placement guarantees. We give you the tools and roadmap; actual outcomes depend on your effort and company processes.' },
+        { icon:'♿', color:'#EF4444', bg:'#FFF1F0', title:'Accessibility', desc:'Designed to work for all students regardless of prior tech exposure. Simple language, clear UI, and no prerequisites needed to use this platform effectively.' },
+        { icon:'🌱', color:'#0284C7', bg:'#E0F2FE', title:'Sustainability', desc:'Aligned with SDG 4 (Quality Education) and SDG 8 (Decent Work). This project contributes to equitable access to quality career preparation for all students.' },
+      ].map(p=>`
+        <div class="card" style="display:flex;gap:14px;align-items:flex-start;">
+          <div style="width:44px;height:44px;background:${p.bg};border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">${p.icon}</div>
+          <div>
+            <div style="font-weight:600;font-size:14px;color:${p.color};margin-bottom:4px;">${p.title}</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.6;">${p.desc}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="card" style="background:linear-gradient(135deg,#1a1a2e,#16213E);color:#fff;text-align:center;">
+      <div style="font-size:28px;margin-bottom:10px;">🤝</div>
+      <div style="font-weight:600;font-size:15px;margin-bottom:6px;">AI for Good — 1M1B Initiative</div>
+      <div style="font-size:13px;opacity:0.7;line-height:1.6;">This project is built for the 1M1B AI for Sustainability Virtual Internship, demonstrating how AI can democratize quality career education and create pathways to decent work for millions of students.</div>
+      <div style="margin-top:14px;display:flex;justify-content:center;gap:10px;">
+        <span class="sdg-badge sdg4" style="font-size:12px;">🎓 SDG 4</span>
+        <span class="sdg-badge sdg8" style="font-size:12px;">💼 SDG 8</span>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:24px;padding:20px;border-top:1px solid var(--border);">
+      <div style="font-weight:700;font-size:16px;color:var(--primary);margin-bottom:4px;">🎓 AI Placement Mentor</div>
+      <div style="font-size:12px;color:var(--muted);">SDG 4: Quality Education · SDG 8: Decent Work & Economic Growth</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px;">Built for 1M1B AI for Sustainability Virtual Internship</div>
+    </div>
+  </div>`;
+}
+
+function bindEvents() {
+  const chipInput = document.getElementById('chipInput');
+  if(chipInput) {
+    chipInput.addEventListener('keydown', function(e) {
+      if(e.key==='Enter' && this.value.trim()) {
+        const val = this.value.trim();
+        if(!profile.skills.includes(val)) { profile.skills.push(val); }
+        this.value='';
+        render();
+      }
+    });
+  }
+}
+
+render();
+</script>
