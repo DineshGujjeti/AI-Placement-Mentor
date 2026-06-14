@@ -18,6 +18,26 @@ Helping students identify skill gaps, generate personalized learning roadmaps, p
 </div>
 
 ---
+## 🌐 Live Demo
+
+🚀 **Try the Application Here**
+
+**Live Website:** https://ai-placement-mentor-one.vercel.app/
+
+The application is deployed on Vercel and can be accessed directly through the link above.
+
+### Features Available in the Live Demo
+
+* 🎯 AI Skill Gap Analysis
+* 🗺️ Personalized Placement Roadmap
+* 🧮 Aptitude Preparation Module
+* 💬 Interview Question Generator
+* 📄 Resume Improvement Assistant
+* 🎓 Placement Readiness Score
+* 🤖 Responsible AI Framework
+
+---
+
 
 ## 📖 Overview
 
